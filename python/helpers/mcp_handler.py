@@ -110,6 +110,10 @@ class MCPTool(Tool):
         )
 
     async def execute(self, **kwargs: Any):
+        # Inject context_id for iMessage MCP tools
+        if "imessage" in self.name.lower():
+            kwargs["_context_id"] = self.agent.context.id
+
         error = ""
         try:
             response: CallToolResult = await MCPConfig.get_instance().call_tool(
