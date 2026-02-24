@@ -40,3 +40,8 @@ agent_history.gif
 
 .agent/**
 .claude/**
+
+# Local environment files
+a0-data
+tailscale-state
+docker-compose.yml
