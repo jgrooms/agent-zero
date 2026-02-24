@@ -1,7 +1,7 @@
 from python.helpers.memory import Memory
 from python.helpers.tool import Tool, Response
 
-DEFAULT_THRESHOLD = 0.7
+DEFAULT_THRESHOLD = 0.4
 DEFAULT_LIMIT = 10
 
 
@@ -9,6 +9,15 @@ class MemoryLoad(Tool):
 
     async def execute(self, query="", threshold=DEFAULT_THRESHOLD, limit=DEFAULT_LIMIT, filter="", **kwargs):
         db = await Memory.get(self.agent)
+
+        # override LLM threshold - never go above 0.5
+        if threshold > 0.5:
+            threshold = DEFAULT_THRESHOLD
+
+        # ignore area filters that reference non-standard areas
+        if filter and any(x in filter.lower() for x in ["personal", "user", "credentials", "private"]):
+            filter = ""
+
         docs = await db.search_similarity_threshold(query=query, limit=limit, threshold=threshold, filter=filter)
 
         if len(docs) == 0:
