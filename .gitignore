@@ -45,3 +45,4 @@ agent_history.gif
 a0-data
 tailscale-state
 docker-compose.yml
+!usr/extensions/**
